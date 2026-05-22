@@ -1,9 +1,12 @@
 def mostrar_menu():
+
     print("\n--- SISTEMA DE VENTAS ---")
     print("1. Registrar venta")
     print("2. Mostrar productos")
     print("3. Consultar deudas")
-    print("4. Salir")
+    print("4. Ver reporte de ventas")
+    print("5. Productos más vendidos")
+    print("6. Salir")
 
 
 def mostrar_productos(productos):
@@ -18,7 +21,7 @@ def mostrar_productos(productos):
         print(codigo, "-", nombre, "- S/.", precio)
 
 
-def registrar_venta(productos, deudas):
+def registrar_venta(productos, deudas, ventas):
 
     total_venta = 0
     continuar = "S"
@@ -39,6 +42,9 @@ def registrar_venta(productos, deudas):
             subtotal = cantidad * precio_producto
 
             total_venta += subtotal
+
+            venta = [nombre_producto, cantidad]
+            ventas.append(venta)
 
             print("\nProducto:", nombre_producto)
             print("Subtotal: S/.", round(subtotal, 2))
@@ -81,6 +87,59 @@ def consultar_deudas(deudas):
             print("Cliente:", cliente, "- Deuda: S/.", round(monto, 2))
 
 
+def reporte_ventas(ventas, productos):
+
+    total_general = 0
+    cantidad_ventas = len(ventas)
+
+    for venta in ventas:
+
+        nombre_producto = venta[0]
+        cantidad = venta[1]
+
+        for codigo in productos:
+
+            if productos[codigo][0] == nombre_producto:
+
+                precio = productos[codigo][1]
+
+                total_general += precio * cantidad
+
+    print("\n--- REPORTE DE VENTAS ---")
+    print("Cantidad de ventas realizadas:", cantidad_ventas)
+    print("Total vendido: S/.", round(total_general, 2))
+
+
+def productos_mas_vendidos(ventas):
+
+    print("\n--- PRODUCTOS MÁS VENDIDOS ---")
+
+    if len(ventas) == 0:
+
+        print("No existen ventas registradas")
+
+    else:
+
+        conteo = {}
+
+        for venta in ventas:
+
+            nombre_producto = venta[0]
+            cantidad = venta[1]
+
+            if nombre_producto in conteo:
+
+                conteo[nombre_producto] += cantidad
+
+            else:
+
+                conteo[nombre_producto] = cantidad
+
+        for producto in conteo:
+
+            print(producto, "- Cantidad vendida:", conteo[producto])
+
+
 def main():
 
     productos = {
@@ -91,10 +150,11 @@ def main():
     }
 
     deudas = []
+    ventas = []
 
     opcion = 0
 
-    while opcion != 4:
+    while opcion != 6:
 
         mostrar_menu()
 
@@ -102,7 +162,7 @@ def main():
 
         if opcion == 1:
 
-            registrar_venta(productos, deudas)
+            registrar_venta(productos, deudas, ventas)
 
         elif opcion == 2:
 
@@ -113,6 +173,14 @@ def main():
             consultar_deudas(deudas)
 
         elif opcion == 4:
+
+            reporte_ventas(ventas, productos)
+
+        elif opcion == 5:
+
+            productos_mas_vendidos(ventas)
+
+        elif opcion == 6:
 
             print("Gracias por usar el sistema")
 
