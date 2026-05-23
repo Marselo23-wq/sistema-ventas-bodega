@@ -6,7 +6,8 @@ def mostrar_menu():
     print("3. Consultar deudas")
     print("4. Ver reporte de ventas")
     print("5. Productos más vendidos")
-    print("6. Salir")
+    print("6. Buscar deuda por cliente")
+    print("7. Salir")
 
 
 def mostrar_productos(productos):
@@ -36,20 +37,27 @@ def registrar_venta(productos, deudas, ventas):
 
             cantidad = int(input("Ingrese la cantidad: "))
 
-            nombre_producto = productos[codigo_producto][0]
-            precio_producto = productos[codigo_producto][1]
+            if cantidad > 0:
 
-            subtotal = cantidad * precio_producto
+                nombre_producto = productos[codigo_producto][0]
+                precio_producto = productos[codigo_producto][1]
 
-            total_venta += subtotal
+                subtotal = cantidad * precio_producto
 
-            venta = [nombre_producto, cantidad]
-            ventas.append(venta)
+                total_venta += subtotal
 
-            print("\nProducto:", nombre_producto)
-            print("Subtotal: S/.", round(subtotal, 2))
+                venta = [nombre_producto, cantidad]
+                ventas.append(venta)
+
+                print("\nProducto:", nombre_producto)
+                print("Subtotal: S/.", round(subtotal, 2))
+
+            else:
+
+                print("La cantidad debe ser mayor a 0")
 
         else:
+
             print("El producto no existe")
 
         continuar = input("\n¿Desea agregar otro producto? (S/N): ").upper()
@@ -60,7 +68,15 @@ def registrar_venta(productos, deudas, ventas):
 
     if tipo_pago == "S":
 
-        nombre_cliente = input("Ingrese el nombre del cliente: ")
+        nombre_cliente = ""
+
+        while nombre_cliente == "":
+
+            nombre_cliente = input("Ingrese el nombre del cliente: ").strip()
+
+            if nombre_cliente == "":
+
+                print("Debe ingresar un nombre válido")
 
         deuda = [nombre_cliente, total_venta]
 
@@ -87,6 +103,38 @@ def consultar_deudas(deudas):
             print("Cliente:", cliente, "- Deuda: S/.", round(monto, 2))
 
 
+def buscar_deuda_cliente(deudas):
+
+    print("\n--- BUSCAR CLIENTE ---")
+
+    nombre_buscar = ""
+
+    while nombre_buscar == "":
+
+        nombre_buscar = input("Ingrese el nombre del cliente: ").strip()
+
+        if nombre_buscar == "":
+
+            print("Debe ingresar un nombre válido")
+
+    encontrado = False
+
+    for deuda in deudas:
+
+        cliente = deuda[0]
+        monto = deuda[1]
+
+        if cliente.lower() == nombre_buscar.lower():
+
+            print("Cliente:", cliente)
+            print("Deuda pendiente: S/.", round(monto, 2))
+
+            encontrado = True
+
+    if encontrado == False:
+
+        print("El cliente no tiene deudas registradas")
+        
 def reporte_ventas(ventas, productos):
 
     total_general = 0
@@ -154,7 +202,7 @@ def main():
 
     opcion = 0
 
-    while opcion != 6:
+    while opcion != 7:
 
         mostrar_menu()
 
@@ -181,6 +229,10 @@ def main():
             productos_mas_vendidos(ventas)
 
         elif opcion == 6:
+
+            buscar_deuda_cliente(deudas)
+
+        elif opcion == 7:
 
             print("Gracias por usar el sistema")
 
