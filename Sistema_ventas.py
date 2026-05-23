@@ -3,7 +3,7 @@
 # =========================================
 
 
-# Funciòn para mostrar el menù principal
+# Función para mostrar el menú principal
 def mostrar_menu():
 
     print("\n" + "=" * 40)
@@ -16,10 +16,11 @@ def mostrar_menu():
     print("4. Ver reporte de ventas")
     print("5. Productos más vendidos")
     print("6. Buscar deuda por cliente")
-    print("7. Salir")
+    print("7. Agregar producto")
+    print("8. Salir")
 
 
-# Funciòn para mostrar los productos disponibles
+# Función para mostrar los productos disponibles
 def mostrar_productos(productos):
 
     print("\n" + "-" * 40)
@@ -34,7 +35,62 @@ def mostrar_productos(productos):
         print(codigo, "-", nombre, "- S/.", precio)
 
 
-# Funciòn para registrar una venta
+# Función para agregar un nuevo producto
+def agregar_producto(productos):
+
+    print("\n" + "-" * 40)
+    print("      AGREGAR NUEVO PRODUCTO")
+    print("-" * 40)
+
+    # Generar el siguiente código disponible automáticamente
+    if len(productos) == 0:
+        nuevo_codigo = 1
+    else:
+        nuevo_codigo = max(productos.keys()) + 1
+
+    # Solicitar el nombre del producto
+    nombre_producto = ""
+
+    while nombre_producto == "":
+
+        nombre_producto = input("Ingrese el nombre del producto: ").strip()
+
+        if nombre_producto == "":
+            print("Debe ingresar un nombre válido")
+
+    # Verificar que el producto no exista ya
+    for codigo in productos:
+        if productos[codigo][0].lower() == nombre_producto.lower():
+            print("Ya existe un producto con ese nombre")
+            return
+
+    # Solicitar el precio del producto
+    precio_producto = None
+
+    while precio_producto is None:
+
+        precio_texto = input("Ingrese el precio del producto (S/.): ").strip()
+
+        try:
+            precio_producto = float(precio_texto)
+
+            if precio_producto <= 0:
+                print("El precio debe ser mayor a 0")
+                precio_producto = None
+
+        except ValueError:
+            print("Debe ingresar un precio válido")
+
+    # Registrar el nuevo producto
+    productos[nuevo_codigo] = [nombre_producto, precio_producto]
+
+    print("\nProducto agregado correctamente")
+    print("Código asignado:", nuevo_codigo)
+    print("Nombre:", nombre_producto)
+    print("Precio: S/.", round(precio_producto, 2))
+
+
+# Función para registrar una venta
 def registrar_venta(productos, deudas, ventas):
 
     total_venta = 0
@@ -110,7 +166,6 @@ def registrar_venta(productos, deudas, ventas):
             nombre_cliente = input("Ingrese el nombre del cliente: ").strip()
 
             if nombre_cliente == "":
-
                 print("Debe ingresar un nombre válido")
 
         deuda = [nombre_cliente, total_venta]
@@ -122,7 +177,7 @@ def registrar_venta(productos, deudas, ventas):
     print("\nVenta registrada correctamente")
 
 
-# Funciòn para mostrar las deudas registradas
+# Función para mostrar las deudas registradas
 def consultar_deudas(deudas):
 
     print("\n" + "-" * 40)
@@ -143,7 +198,7 @@ def consultar_deudas(deudas):
             print("Cliente:", cliente, "- Deuda: S/.", round(monto, 2))
 
 
-# Funciòn para buscar deuda por cliente
+# Función para buscar deuda por cliente
 def buscar_deuda_cliente(deudas):
 
     print("\n" + "-" * 40)
@@ -157,7 +212,6 @@ def buscar_deuda_cliente(deudas):
         nombre_buscar = input("Ingrese el nombre del cliente: ").strip()
 
         if nombre_buscar == "":
-
             print("Debe ingresar un nombre válido")
 
     encontrado = False
@@ -179,7 +233,7 @@ def buscar_deuda_cliente(deudas):
         print("El cliente no tiene deudas registradas")
 
 
-# Funciòn para mostrar el reporte de ventas
+# Función para mostrar el reporte de ventas
 def reporte_ventas(ventas, productos):
 
     total_general = 0
@@ -206,7 +260,7 @@ def reporte_ventas(ventas, productos):
     print("Total vendido: S/.", round(total_general, 2))
 
 
-# Funciòn para mostrar los productos más vendidos
+# Función para mostrar los productos más vendidos
 def productos_mas_vendidos(ventas):
 
     print("\n" + "-" * 40)
@@ -239,7 +293,7 @@ def productos_mas_vendidos(ventas):
             print(producto, "- Cantidad vendida:", conteo[producto])
 
 
-# Funciòn principal del sistema
+# Función principal del sistema
 def main():
 
     productos = {
@@ -260,7 +314,7 @@ def main():
 
     opcion = 0
 
-    while opcion != 7:
+    while opcion != 8:
 
         mostrar_menu()
 
@@ -299,6 +353,10 @@ def main():
             buscar_deuda_cliente(deudas)
 
         elif opcion == 7:
+
+            agregar_producto(productos)
+
+        elif opcion == 8:
 
             print("\nGracias por usar el sistema")
 
