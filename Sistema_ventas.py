@@ -1,6 +1,15 @@
+# =========================================
+# SISTEMA DE VENTAS PARA TIENDA DE BARRIO
+# =========================================
+
+
+# Funciòn para mostrar el menù principal
 def mostrar_menu():
 
-    print("\n--- SISTEMA DE VENTAS ---")
+    print("\n" + "=" * 40)
+    print("      SISTEMA DE VENTAS")
+    print("=" * 40)
+
     print("1. Registrar venta")
     print("2. Mostrar productos")
     print("3. Consultar deudas")
@@ -10,9 +19,12 @@ def mostrar_menu():
     print("7. Salir")
 
 
+# Funciòn para mostrar los productos disponibles
 def mostrar_productos(productos):
 
-    print("\n--- PRODUCTOS DISPONIBLES ---")
+    print("\n" + "-" * 40)
+    print("      PRODUCTOS DISPONIBLES")
+    print("-" * 40)
 
     for codigo in productos:
 
@@ -22,6 +34,7 @@ def mostrar_productos(productos):
         print(codigo, "-", nombre, "- S/.", precio)
 
 
+# Funciòn para registrar una venta
 def registrar_venta(productos, deudas, ventas):
 
     total_venta = 0
@@ -31,38 +44,60 @@ def registrar_venta(productos, deudas, ventas):
 
         mostrar_productos(productos)
 
-        codigo_producto = int(input("\nIngrese el código del producto: "))
+        codigo_texto = input("\nIngrese el código del producto: ")
 
-        if codigo_producto in productos:
+        if codigo_texto.isdigit():
 
-            cantidad = int(input("Ingrese la cantidad: "))
+            codigo_producto = int(codigo_texto)
 
-            if cantidad > 0:
+            if codigo_producto in productos:
 
-                nombre_producto = productos[codigo_producto][0]
-                precio_producto = productos[codigo_producto][1]
+                cantidad_texto = input("Ingrese la cantidad: ")
 
-                subtotal = cantidad * precio_producto
+                if cantidad_texto.isdigit():
 
-                total_venta += subtotal
+                    cantidad = int(cantidad_texto)
 
-                venta = [nombre_producto, cantidad]
-                ventas.append(venta)
+                    if cantidad > 0:
 
-                print("\nProducto:", nombre_producto)
-                print("Subtotal: S/.", round(subtotal, 2))
+                        nombre_producto = productos[codigo_producto][0]
+                        precio_producto = productos[codigo_producto][1]
+
+                        subtotal = cantidad * precio_producto
+
+                        total_venta += subtotal
+
+                        venta = [nombre_producto, cantidad]
+                        ventas.append(venta)
+
+                        print("\nProducto:", nombre_producto)
+                        print("Subtotal: S/.", round(subtotal, 2))
+
+                    else:
+
+                        print("La cantidad debe ser mayor a 0")
+
+                else:
+
+                    print("Debe ingresar una cantidad válida")
 
             else:
 
-                print("La cantidad debe ser mayor a 0")
+                print("El producto no existe")
 
         else:
 
-            print("El producto no existe")
+            print("Debe ingresar un código válido")
 
         continuar = input("\n¿Desea agregar otro producto? (S/N): ").upper()
 
-    print("\nTotal a pagar: S/.", round(total_venta, 2))
+    if total_venta == 0:
+
+        print("\nNo se registró ninguna venta")
+        return
+
+    print("\n" + "-" * 40)
+    print("Total a pagar: S/.", round(total_venta, 2))
 
     tipo_pago = input("¿La compra es al crédito? (S/N): ").upper()
 
@@ -82,12 +117,17 @@ def registrar_venta(productos, deudas, ventas):
 
         deudas.append(deuda)
 
-        print("La deuda fue registrada correctamente")
+        print("\nDeuda registrada correctamente")
+
+    print("\nVenta registrada correctamente")
 
 
+# Funciòn para mostrar las deudas registradas
 def consultar_deudas(deudas):
 
-    print("\n--- LISTA DE DEUDAS ---")
+    print("\n" + "-" * 40)
+    print("         LISTA DE DEUDAS")
+    print("-" * 40)
 
     if len(deudas) == 0:
 
@@ -103,9 +143,12 @@ def consultar_deudas(deudas):
             print("Cliente:", cliente, "- Deuda: S/.", round(monto, 2))
 
 
+# Funciòn para buscar deuda por cliente
 def buscar_deuda_cliente(deudas):
 
-    print("\n--- BUSCAR CLIENTE ---")
+    print("\n" + "-" * 40)
+    print("         BUSCAR CLIENTE")
+    print("-" * 40)
 
     nombre_buscar = ""
 
@@ -126,7 +169,7 @@ def buscar_deuda_cliente(deudas):
 
         if cliente.lower() == nombre_buscar.lower():
 
-            print("Cliente:", cliente)
+            print("\nCliente:", cliente)
             print("Deuda pendiente: S/.", round(monto, 2))
 
             encontrado = True
@@ -134,7 +177,9 @@ def buscar_deuda_cliente(deudas):
     if encontrado == False:
 
         print("El cliente no tiene deudas registradas")
-        
+
+
+# Funciòn para mostrar el reporte de ventas
 def reporte_ventas(ventas, productos):
 
     total_general = 0
@@ -153,14 +198,20 @@ def reporte_ventas(ventas, productos):
 
                 total_general += precio * cantidad
 
-    print("\n--- REPORTE DE VENTAS ---")
+    print("\n" + "-" * 40)
+    print("       REPORTE DE VENTAS")
+    print("-" * 40)
+
     print("Cantidad de ventas realizadas:", cantidad_ventas)
     print("Total vendido: S/.", round(total_general, 2))
 
 
+# Funciòn para mostrar los productos más vendidos
 def productos_mas_vendidos(ventas):
 
-    print("\n--- PRODUCTOS MÁS VENDIDOS ---")
+    print("\n" + "-" * 40)
+    print("      PRODUCTOS MÁS VENDIDOS")
+    print("-" * 40)
 
     if len(ventas) == 0:
 
@@ -188,13 +239,20 @@ def productos_mas_vendidos(ventas):
             print(producto, "- Cantidad vendida:", conteo[producto])
 
 
+# Funciòn principal del sistema
 def main():
 
     productos = {
         1: ["Coca Cola", 3.50],
         2: ["Pan", 0.50],
         3: ["Leche", 4.00],
-        4: ["Galletas", 2.00]
+        4: ["Galletas", 2.00],
+        5: ["Arroz", 5.00],
+        6: ["Azúcar", 4.50],
+        7: ["Aceite", 8.00],
+        8: ["Huevos", 7.50],
+        9: ["Fideos", 3.00],
+        10: ["Chocolate", 2.50]
     }
 
     deudas = []
@@ -206,7 +264,15 @@ def main():
 
         mostrar_menu()
 
-        opcion = int(input("Ingrese una opción: "))
+        opcion_texto = input("\nIngrese una opción: ")
+
+        if opcion_texto.isdigit():
+
+            opcion = int(opcion_texto)
+
+        else:
+
+            opcion = 0
 
         if opcion == 1:
 
@@ -234,11 +300,10 @@ def main():
 
         elif opcion == 7:
 
-            print("Gracias por usar el sistema")
+            print("\nGracias por usar el sistema")
 
         else:
 
-            print("Opción incorrecta")
-
+            print("\nOpción incorrecta")
 
 main()
